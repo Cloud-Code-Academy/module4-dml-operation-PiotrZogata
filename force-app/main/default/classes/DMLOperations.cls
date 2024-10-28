@@ -62,14 +62,17 @@ public with sharing class DMLOperations {
      */
     public static Id insertNewContact(Id accountId) {
         // Create a new Contact instance
-
+        Contact contact = new Contact();
         // Set some fields on the Contact
         // Set the AccountId field to the given accountId
-
+        contact.Email = 'test@gmail.com';
+        contact.AccountId = accountId; 
+        contact.LastName = 'Test Account ' + Math.random();
+        contact.AccountId = accountId; 
         // Insert the Contact into the database
-
+        insert contact;
         // Return the Id of the newly created Contact
-        return null;
+        return contact.Id;
     }
 
     /**
@@ -81,11 +84,10 @@ public with sharing class DMLOperations {
      */
     public static void updateContactLastName(Id contactId, String newLastName) {
         // Retrieve the Contact from the database
-        // [SELECT Id FROM Contact WHERE Id = :contactId]
-
-        // Update the Contact's last name
-
+        Contact contact = [SELECT Id FROM Contact WHERE Id = :contactId];
+        contact.LastName = newLastName;
         // Update the Contact in the database
+        update contact;
     }
 
     /**
