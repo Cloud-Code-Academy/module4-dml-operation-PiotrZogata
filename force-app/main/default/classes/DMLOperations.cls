@@ -33,7 +33,7 @@ public with sharing class DMLOperations {
         // Create a new Account instance
         Account acc = new Account();
         // Set some fields on the Account
-        acc.Name = 'Test Account ' + Math.random();
+        acc.Name = 'Test Account ' + Math.random();//Crypto.getRandomInteger();
         // Insert the Account into the database
         insert acc;
         // Return the Id of the newly created Account
@@ -99,11 +99,11 @@ public with sharing class DMLOperations {
      */
     public static void updateOpportunityStage(Id oppId, String newStage) {
         // Retrieve the Opportunity from the database
-        // [SELECT Id FROM Opportunity WHERE Id = :oppId]
-
+        Opportunity opp =  [SELECT Id FROM Opportunity WHERE Id = :oppId];
         // Update the Opportunity's stage
-
+        opp.StageName = newStage;
         // Update the Opportunity in the database
+        update opp;
     }
 
     /**
@@ -116,9 +116,11 @@ public with sharing class DMLOperations {
      */
     public static void updateAccountFields(Id accountId, String newName, String newIndustry) {
         // Query the account
-        // [SELECT Id FROM Account WHERE Id = :accountId]
-
+        Account acc  = [SELECT Id FROM Account WHERE Id = :accountId];
         // Update the Account with the given Id with the new name and industry
+        acc.Name = newName;
+        acc.Industry = newIndustry;
+        update acc;
     }
 
 
