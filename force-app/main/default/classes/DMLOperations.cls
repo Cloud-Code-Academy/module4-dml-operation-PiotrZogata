@@ -134,10 +134,16 @@ public with sharing class DMLOperations {
      */
     public static void upsertOpportunityList(List<Opportunity> opportunities) {
         // Loop through each Opportunity in the list
+        for(Opportunity opp : opportunities){
             // Set the Opportunity's Stage to Qualification
             // Set the Opportunity's Close Date to 3 months from today
             // Set the Opportunity's Amount to 50000
+            opp.StageName = 'Qualification';
+            opp.CloseDate =  Date.toDay().addMonths(3);
+            opp.Amount = 50000;
+        }
         // Upsert the opportunities List so that records are either updated or created
+        upsert opportunities;
     }
 
     /**
@@ -151,9 +157,17 @@ public with sharing class DMLOperations {
      * @param oppNames The list of Opportunity names.
      */
     public static void upsertOpportunities(String accountName, List<String> oppNames) {
+        Account acc = new Account(name = accountName);
+        insert acc;
         // Loop through each Opportunity name
+        List <Opportunity> oppList = new List<Opportunity>();
+        for(String str : oppNames){
             // Create an Opportunity with the given name
-            // Add the Opportunity to the list
+            Opportunity opp = new Opportunity(Name = str, AccountId = acc.Id, StageName = 'Qualification', CloseDate =  Date.toDay().addMonths(3), Amount = 500);
+             // Add the Opportunity to the list
+             oppList.add(opp);
+        }
+        upsert oppList ;
     }
     
     /**
