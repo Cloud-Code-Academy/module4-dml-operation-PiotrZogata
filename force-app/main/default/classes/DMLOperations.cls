@@ -181,35 +181,45 @@ public with sharing class DMLOperations {
 	public static Account upsertAccount(String accountName) {
 		// Query for the Account
 		List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName];
-
-		// if the Account exists, update the description
-
-		// otherwise, create a new Account and set the description
-
-		// Upsert the Account
-		return null;
+		Account account;
+    if (!accounts.isEmpty()) {
+        // if the Account exists, update the description
+        account = accounts[0];
+        account.Description = 'Updated Account';
+    } else {
+        // otherwise, create a new Account and set the description
+        account = new Account(Name = accountName, Description = 'New Account');
+    }
+    // Upsert the Account
+    upsert account;
+    // return the account
+    return account;
 	}
 
     /**
      * Question 10
 	 * Manage the association between Contacts and Accounts
 	 * Ensure that for each Contact in the provided list, there is a corresponding Account Name that matches the Contact's last name.
-	 * If such an Account does not exist, the method creates it; if it does, the method ensures the Contact is associated with it. (Hint: use previous upsertAccount method - this may cause bad practices but for learning purposes it's okay.)
+	 * If such an Account does not exist, the method creates it; if it does, the method ensures the Contact is associated with it. 
+     * (Hint: use previous upsertAccount method - this may cause bad practices but for learning purposes it's okay.)
      * Example Contact.LastName = 'Doe' Link to Account.Name = 'Doe' 
      * Example Contact.LastName = 'Jane' Link to Account.Name = 'Jane'
 	 * @param contactsToUpsert List of Contacts to be upserted and linked to accounts.
 	 */
 	public static void upsertAccountsWithContacts(List<Contact> contactsToUpsert) {
-		// Loop through each Contact
+    // Loop through each Contact
+        for (Contact con : contactsToUpsert) {
+    // Extract the Account Name from Contact's LastName
+        String accountName = con.LastName;
+    // Get the account based on the name or create one if it doesn't exist
+        Account acc = upsertAccount(accountName);
+    // Link the Contact to its Account using the Account Id
+        con.AccountId = acc.Id;
+    }
+    // Upsert the Contacts
+    upsert contactsToUpsert;
+    }
 
-		// Extract the Account Name from Contact's LastName
-
-		// Get the account based on the name or create one if it doesn't exist
-
-		// Link the Contact to its Account using the Account Id
-
-		// Upsert the Contacts
-	}
 
     /**
      * Question 11
