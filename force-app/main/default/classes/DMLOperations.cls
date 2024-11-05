@@ -228,10 +228,15 @@ public with sharing class DMLOperations {
      */
     public static void insertAndDeleteLeads(List<String> leadNames) {
         // Loop through each Lead name
-
+        List <Lead> listOfLead = new List<Lead>();
+        for(String leadName : leadNames){
+            Lead lead = new Lead(LastName = leadName, Company = 'testCompany');
+            listOfLead.add(lead);
+        }
         // Insert the Leads
-
+        insert listOfLead;
         // Delete the Leads
+        delete listOfLead;
     }
 
 
@@ -243,7 +248,13 @@ public with sharing class DMLOperations {
      */
     public static void createAndDeleteCases(String accountId, Integer numOfCases) {
         // Insert the cases
-
+        List<Case> listOfCases = new List<Case>();
+        for (Integer i = 0; i < numOfCases; i++) {
+            Case caseToAdd = new Case(AccountId = accountId, Status = 'New', Origin = 'Email');
+                listOfCases.add(caseToAdd);
+        }
+        insert listOfCases;
         // Delete the cases
+        delete listOfCases;
     }
 }
